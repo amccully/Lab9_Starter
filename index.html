@@ -87,6 +87,15 @@
     </section>
   </main>
 
+  <!-- Script for TrackJS -->
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "d3b971668a694c2fb312105957adc37e"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+                        
   <script>
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
@@ -95,13 +104,121 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      // added try catch
+      try {
+        if(operator == "/" && secondNum == 0) {
+          throw new DivideByZeroError(); 
+        }
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      }
+      catch(err) {
+        console.error("There was an error in your calculation. " + err)
+      }
+      // finally could be used here to execute any remaining code, however, it is not needed in this case
     });
+
+    // added custom error
+    class DivideByZeroError extends Error {
+      constructor() {
+        super("Cannot divide by 0!");
+        this.name = "DivideByZero";
+      }
+    }
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
     // You may move this JS to another file if you wish
+    const consoleLog = errorBtns[0];
+    consoleLog.addEventListener('click', (event) => {
+      console.log("Demo log");
+    })
+
+    const consoleError = errorBtns[1];
+    consoleError.addEventListener('click', (event) => {
+      console.error("Demo error");
+    })
+
+    const consoleCount = errorBtns[2];
+    consoleCount.addEventListener('click', (event) => {
+      console.count("Demo count");
+    })
+
+    const consoleWarn = errorBtns[3];
+    consoleWarn.addEventListener('click', (event) => {
+      console.warn("Demo warn");
+    })
+
+    const consoleAssert = errorBtns[4];
+    consoleAssert.addEventListener('click', (event) => {
+      // boolean value false would be replaced with boolean expression (testing an assertion)
+      console.assert(false, "Demo assert");
+    })
+
+    const consoleClear = errorBtns[5];
+    consoleClear.addEventListener('click', (event) => {
+      console.clear();
+    })
+
+    const consoleDir = errorBtns[6];
+    consoleDir.addEventListener('click', (event) => {
+      console.dir(consoleDir);
+    })
+
+    const consoleDirXML = errorBtns[7];
+    consoleDirXML.addEventListener('click', (event) => {
+      console.dirxml(consoleDirXML);
+    })
+
+    const consoleGroupStart = errorBtns[8];
+    consoleGroupStart.addEventListener('click', (event) => {
+      console.group();
+    })
+
+    const consoleGroupEnd = errorBtns[9];
+    consoleGroupEnd.addEventListener('click', (event) => {
+      console.groupEnd();
+    })
+
+    const consoleTable = errorBtns[10];
+    consoleTable.addEventListener('click', (event) => {
+      console.table(["Jimmy Choo", "Versace", "Chanel"]);
+    })
+
+    const startTimer = errorBtns[11];
+    startTimer.addEventListener('click', (event) => {
+      console.time("Demo timer");
+    })
+
+    const endTimer = errorBtns[12];
+    endTimer.addEventListener('click', (event) => {
+      console.timeEnd("Demo timer");
+    })
+    ////// Function tracing
+    const consoleTrace = errorBtns[13];
+    consoleTrace.addEventListener('click', (event) => {
+      level1();
+    })
+
+    function level1() {
+      level2();
+    }
+
+    function level2() {
+      function level3() {
+        console.trace();
+      }
+      level3();
+    }
+    //////
+
+    const globalError = errorBtns[14];
+    globalError.addEventListener('click', (event) => {
+      doesntExist();
+    })
+
+    window.addEventListener("error", (event) => {console.log("An error occurred!")});
+
   </script>
 </body>
 
